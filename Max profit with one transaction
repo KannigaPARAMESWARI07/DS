@@ -1,0 +1,50 @@
+#include <stdio.h>
+
+// Function to calculate maximum profit with one buy and one sell
+int getMaximumProfit(int stockPrices[], int numberOfDays) {
+    if (numberOfDays < 2) {
+        return 0; // Not enough days to make a transaction
+    }
+
+    int minimumPurchasePrice = stockPrices[0];
+    int maximumProfit = 0;
+
+    for (int currentDay = 1; currentDay < numberOfDays; currentDay++) {
+        int currentPrice = stockPrices[currentDay];
+
+        // Update minimum price if a lower one is found
+        if (currentPrice < minimumPurchasePrice) {
+            minimumPurchasePrice = currentPrice;
+        }
+
+        // Calculate profit if stock is sold today
+        int currentProfit = currentPrice - minimumPurchasePrice;
+
+        // Update maximum profit if current is higher
+        if (currentProfit > maximumProfit) {
+            maximumProfit = currentProfit;
+        }
+    }
+
+    return maximumProfit;
+}
+
+int main() {
+    int stockPrices[100], numberOfDays;
+
+    // Input the number of days
+    printf("Enter number of days: ");
+    scanf("%d", &numberOfDays);
+
+    // Input the stock prices for each day
+    printf("Enter stock prices for %d days:\n", numberOfDays);
+    for (int dayIndex = 0; dayIndex < numberOfDays; dayIndex++) {
+        scanf("%d", &stockPrices[dayIndex]);
+    }
+
+    // Calculate and display maximum profit
+    int resultProfit = getMaximumProfit(stockPrices, numberOfDays);
+    printf("Maximum Profit: %d\n", resultProfit);
+
+    return 0;
+}
