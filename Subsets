@@ -1,0 +1,46 @@
+#include <stdio.h>
+
+int hasPairWithSum(int array[], int arraySize, int targetSum) {
+    int startIndex = 0;
+    int endIndex = arraySize - 1;
+
+    while (startIndex < endIndex) {
+        int currentSum = array[startIndex] + array[endIndex];
+        if (currentSum == targetSum)
+            return 1; // Pair found
+        else if (currentSum < targetSum)
+            startIndex++;
+        else
+            endIndex--;
+    }
+
+    return 0; // No pair found
+}
+
+int main() {
+    int numberOfElements, targetSum;
+
+    // Input array size
+    printf("Enter the number of elements in the array: ");
+    scanf("%d", &numberOfElements);
+
+    int array[numberOfElements];
+
+    // Input array elements
+    printf("Enter %d sorted elements:\n", numberOfElements);
+    for (int elementIndex = 0; elementIndex < numberOfElements; elementIndex++) {
+        scanf("%d", &array[elementIndex]);
+    }
+
+    // Input target sum
+    printf("Enter the target sum: ");
+    scanf("%d", &targetSum);
+
+    // Check for pair
+    if (hasPairWithSum(array, numberOfElements, targetSum))
+        printf("Pair found with sum %d\n", targetSum);
+    else
+        printf("No pair found with sum %d\n", targetSum);
+
+    return 0;
+}
