@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node* next;
+};
+struct Node* createNode(int dataValue) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = dataValue;
+    newNode->next = NULL;
+    return newNode;
+}
+void insertNode(struct Node** headReference, int dataValue) {
+    struct Node* newNode = createNode(dataValue);
+    if (*headReference == NULL) {
+        *headReference = newNode;
+        return;
+    }
+    struct Node* currentNode = *headReference;
+    while (currentNode->next != NULL) {
+        currentNode = currentNode->next;
+    }
+    currentNode->next = newNode;
+}
+void reverseLinkedList(struct Node** headReference) {
+    struct Node* previousNode = NULL;
+    struct Node* currentNode = *headReference;
+    struct Node* nextNode = NULL;
+    while (currentNode != NULL) {
+        nextNode = currentNode->next;
+        currentNode->next = previousNode;
+        previousNode = currentNode;
+        currentNode = nextNode;
+    }
+    *headReference = previousNode;
+}
+void printLinkedList(struct Node* headNode) {
+    struct Node* currentNode = headNode;
+    while (currentNode != NULL) {
+        printf("%d -> ", currentNode->data);
+        currentNode = currentNode->next;
+    }
+    printf("NULL\n");
+}
+int main() {
+    struct Node* headNode = NULL;
+    int totalNodeCount, currentNodeIndex, nodeDataValue;
+    printf("Enter the number of nodes: ");
+    scanf("%d", &totalNodeCount);
+    for (currentNodeIndex = 1; currentNodeIndex <= totalNodeCount; currentNodeIndex++) {
+        printf("Enter value for node %d: ", currentNodeIndex);
+        scanf("%d", &nodeDataValue);
+        insertNode(&headNode, nodeDataValue);
+    }
+    printf("\nOriginal linked list: ");
+    printLinkedList(headNode);
+    reverseLinkedList(&headNode);
+    printf("Reversed linked list: ");
+    printLinkedList(headNode);
+   return 0;
+}
