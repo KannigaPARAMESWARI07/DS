@@ -1,0 +1,26 @@
+#include <stdio.h>
+int main() {
+    int numbers[100], size, target;
+    // Input array size and elements
+    printf("Enter number of elements: ");
+    scanf("%d", &size);
+    printf("Enter the elements:\n");
+    for (int index = 0; index < size; index++) {
+        scanf("%d", &numbers[index]);
+    }
+    // Input target sum
+    printf("Enter the target sum: ");
+    scanf("%d", &target);
+    // Check for pair
+    for (int first = 0; first < size; first++) {
+        for (int second = first + 1; second < size; second++) {
+            if (numbers[first] + numbers[second] == target) {
+                printf("Pair found: %d + %d = %d\n", numbers[first], numbers[second], target);
+                return 0;
+            }
+        }
+    }
+
+    printf("No pair found that adds up to %d\n", target);
+    return 0;
+}
