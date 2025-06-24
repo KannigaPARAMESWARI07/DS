@@ -1,0 +1,81 @@
+#include <stdio.h>
+void rotateMatrixClockwise90(int matrix[100][100], int matrixSize) {
+    // Step 1: Transpose the matrix
+    for (int rowIndex = 0; rowIndex < matrixSize; rowIndex++) {
+        for (int columnIndex = rowIndex + 1; columnIndex < matrixSize; columnIndex++) {
+            int temp = matrix[rowIndex][columnIndex];
+            matrix[rowIndex][columnIndex] = matrix[columnIndex][rowIndex];
+            matrix[columnIndex][rowIndex] = temp;
+        }
+    }
+ // Step 2: Reverse each row
+    for (int rowIndex = 0; rowIndex < matrixSize; rowIndex++) {
+        for (int columnIndex = 0; columnIndex < matrixSize / 2; columnIndex++) {
+            int temp = matrix[rowIndex][columnIndex];
+            matrix[rowIndex][columnIndex] = matrix[rowIndex][matrixSize - 1 - columnIndex];
+            matrix[rowIndex][matrixSize - 1 - columnIndex] = temp;
+        }
+    }
+}
+void printMatrixInSpiralOrder(int matrix[100][100], int matrixSize) {
+    int top = 0;
+    int bottom = matrixSize - 1;
+    int left = 0;
+    int right = matrixSize - 1;
+    printf("Spiral order after 90-degree rotation:\n");
+    while (top <= bottom && left <= right) {
+        // Print top row
+        for (int columnIndex = left; columnIndex <= right; columnIndex++) {
+            printf("%d ", matrix[top][columnIndex]);
+        }
+        top++;
+        // Print right column
+        for (int rowIndex = top; rowIndex <= bottom; rowIndex++) {
+            printf("%d ", matrix[rowIndex][right]);
+        }
+        right--;
+        // Print bottom row
+        if (top <= bottom) {
+            for (int columnIndex = right; columnIndex >= left; columnIndex--) {
+                printf("%d ", matrix[bottom][columnIndex]);
+            }
+            bottom--;
+        }
+        // Print left column
+        if (left <= right) {
+            for (int rowIndex = bottom; rowIndex >= top; rowIndex--) {
+                printf("%d ", matrix[rowIndex][left]);
+            }
+            left++;
+        }
+    }
+    printf("\n");
+}
+int main() {
+    int matrixSize;
+    int matrix[100][100];
+    // Input matrix size
+    printf("Enter size of the square matrix: ");
+    scanf("%d", &matrixSize);
+    // Input matrix elements
+    printf("Enter elements of the matrix:\n");
+    for (int rowIndex = 0; rowIndex < matrixSize; rowIndex++) {
+        for (int columnIndex = 0; columnIndex < matrixSize; columnIndex++) {
+            scanf("%d", &matrix[rowIndex][columnIndex]);
+        }
+    }
+    // Rotate the matrix by 90 degrees clockwise
+    rotateMatrixClockwise90(matrix, matrixSize);
+    // Print the matrix in spiral order
+    printMatrixInSpiralOrder(matrix, matrixSize);
+  return 0;
+}
+
+OUTPUT:
+Enter size of the square matrix: 3
+Enter elements of the matrix:
+1 2 3 
+4 5 6
+7 8 9
+Spiral order after 90-degree rotation:
+7 4 1 2 3 6 9 8 5 
