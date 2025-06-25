@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Define structure to store student details
+struct Student {
+    int rollNumber;
+    char studentName[50];
+    int markSubject1;
+    int markSubject2;
+    int markSubject3;
+    int totalMarks;
+};
+
+int main() {
+    int numberOfStudents;
+    printf("Enter the number of students: ");
+    scanf("%d", &numberOfStudents);
+
+    // Dynamically allocate memory for the student array
+    struct Student* studentRecords = (struct Student*)malloc(numberOfStudents * sizeof(struct Student));
+
+    if (studentRecords == NULL) {
+        printf("Memory allocation failed!\n");
+        return 1;
+    }
+
+    int studentIndex;
+
+    // Input details for each student
+    for (studentIndex = 0; studentIndex < numberOfStudents; studentIndex++) {
+        printf("\n--- Enter details for Student %d ---\n", studentIndex + 1);
+
+        printf("Enter Roll Number: ");
+        scanf("%d", &studentRecords[studentIndex].rollNumber);
+
+        printf("Enter Name: ");
+        scanf(" %[^\n]", studentRecords[studentIndex].studentName);  // Input with spaces
+
+        printf("Enter Mark for Subject 1: ");
+        scanf("%d", &studentRecords[studentIndex].markSubject1);
+
+        printf("Enter Mark for Subject 2: ");
+        scanf("%d", &studentRecords[studentIndex].markSubject2);
+
+        printf("Enter Mark for Subject 3: ");
+        scanf("%d", &studentRecords[studentIndex].markSubject3);
+
+        // Calculate total marks
+        studentRecords[studentIndex].totalMarks =
+            studentRecords[studentIndex].markSubject1 +
+            studentRecords[studentIndex].markSubject2 +
+            studentRecords[studentIndex].markSubject3;
+    }
+
+    // Display all student records
+    printf("\n=== Student Records ===\n");
+    for (studentIndex = 0; studentIndex < numberOfStudents; studentIndex++) {
+        printf("\n--- Student %d ---\n", studentIndex + 1);
+        printf("Roll Number : %d\n", studentRecords[studentIndex].rollNumber);
+        printf("Name        : %s\n", studentRecords[studentIndex].studentName);
+        printf("Subject 1   : %d\n", studentRecords[studentIndex].markSubject1);
+        printf("Subject 2   : %d\n", studentRecords[studentIndex].markSubject2);
+        printf("Subject 3   : %d\n", studentRecords[studentIndex].markSubject3);
+        printf("Total Marks : %d\n", studentRecords[studentIndex].totalMarks);
+    }
+
+    // Free the dynamically allocated memory
+    free(studentRecords);
+
+    return 0;
+}
