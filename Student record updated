@@ -1,0 +1,115 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Student {
+    int rollNumber;
+    char studentName[50];
+    int markSubject1;
+    int markSubject2;
+    int markSubject3;
+    int totalMarks;
+};
+
+void inputStudent(struct Student* s) {
+    printf("Enter Roll Number: ");
+    scanf("%d", &s->rollNumber);
+
+    printf("Enter Name: ");
+    scanf(" %[^\n]", s->studentName);
+
+    printf("Enter Mark for Subject 1: ");
+    scanf("%d", &s->markSubject1);
+
+    printf("Enter Mark for Subject 2: ");
+    scanf("%d", &s->markSubject2);
+
+    printf("Enter Mark for Subject 3: ");
+    scanf("%d", &s->markSubject3);
+
+    s->totalMarks = s->markSubject1 + s->markSubject2 + s->markSubject3;
+}
+
+void displayStudents(struct Student* arr, int count) {
+    printf("\n=== Student Records ===\n");
+    for (int i = 0; i < count; i++) {
+        printf("\n--- Student %d ---\n", i + 1);
+        printf("Roll Number : %d\n", arr[i].rollNumber);
+        printf("Name        : %s\n", arr[i].studentName);
+        printf("Subject 1   : %d\n", arr[i].markSubject1);
+        printf("Subject 2   : %d\n", arr[i].markSubject2);
+        printf("Subject 3   : %d\n", arr[i].markSubject3);
+        printf("Total Marks : %d\n", arr[i].totalMarks);
+    }
+}
+
+void insertAtFront(struct Student** arr, int* count) {
+    *arr = realloc(*arr, (*count + 1) * sizeof(struct Student));
+    if (*arr == NULL) {
+        printf("Memory reallocation failed!\n");
+        return;
+    }
+
+    // Shift all students one position to the right
+    for (int i = *count; i > 0; i--) {
+        (*arr)[i] = (*arr)[i - 1];
+    }
+
+    printf("\n--- Enter details for new student at FRONT ---\n");
+    inputStudent(&(*arr)[0]);
+    (*count)++;
+}
+
+void insertAtPosition(struct Student** arr, int* count, int pos) {
+    if (pos < 0 || pos > *count) {
+        printf("Invalid position!\n");
+        return;
+    }
+
+    *arr = realloc(*arr, (*count + 1) * sizeof(struct Student));
+    if (*arr == NULL) {
+        printf("Memory reallocation failed!\n");
+        return;
+    }
+
+    // Shift right to make space
+    for (int i = *count; i > pos; i--) {
+        (*arr)[i] = (*arr)[i - 1];
+    }
+
+    printf("\n--- Enter details for new student at position %d ---\n", pos + 1);
+    inputStudent(&(*arr)[pos]);
+    (*count)++;
+}
+
+int main() {
+    int numberOfStudents;
+    printf("Enter the number of students: ");
+    scanf("%d", &numberOfStudents);
+
+    struct Student* studentRecords = (struct Student*)malloc(numberOfStudents * sizeof(struct Student));
+    if (studentRecords == NULL) {
+        printf("Memory allocation failed!\n");
+        return 1;
+    }
+
+    for (int i = 0; i < numberOfStudents; i++) {
+        printf("\n--- Enter details for Student %d ---\n", i + 1);
+        inputStudent(&studentRecords[i]);
+    }
+
+    // Insert at front
+    insertAtFront(&studentRecords, &numberOfStudents);
+
+    // Insert at specific position
+    int pos;
+    printf("\nEnter position to insert a new student (1 to %d): ", numberOfStudents + 1);
+    scanf("%d", &pos);
+    insertAtPosition(&studentRecords, &numberOfStudents, pos - 1);
+
+    // Display all students
+    displayStudents(studentRecords, numberOfStudents);
+
+    free(studentRecords);
+    return 0;
+}
