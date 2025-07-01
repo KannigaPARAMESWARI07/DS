@@ -1,0 +1,78 @@
+#include "contact_list.h"
+
+int main() {
+    Node* head = NULL;
+    int user_choice;
+    int position;
+    char name[NAME_LEN];
+    char phone[PHONE_LEN];
+
+    do {
+        printf("\n--- Contact List Menu ---\n");
+        printf("1. Insert Contact at Beginning\n");
+        printf("2. Insert Contact at End\n");
+        printf("3. Insert Contact at Position\n");
+        printf("4. Delete Contact at Beginning\n");
+        printf("5. Delete Contact at End\n");
+        printf("6. Delete Contact at Position\n");
+        printf("7. Display All Contacts\n");
+        printf("0. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &user_choice);
+        getchar(); // Clear newline from input buffer
+
+        switch (user_choice) {
+            case 1:
+            case 2:
+            case 3:
+                printf("Enter Name: ");
+                fgets(name, NAME_LEN, stdin);
+                name[strcspn(name, "\n")] = '\0'; // Remove newline
+
+                printf("Enter Phone Number: ");
+                fgets(phone, PHONE_LEN, stdin);
+                phone[strcspn(phone, "\n")] = '\0'; // Remove newline
+
+                if (user_choice == 1) {
+                    insert_at_beginning(&head, name, phone);
+                } else if (user_choice == 2) {
+                    insert_at_end(&head, name, phone);
+                } else {
+                    printf("Enter Position: ");
+                    scanf("%d", &position);
+                    getchar(); // Clear buffer
+                    insert_at_position(&head, name, phone, position);
+                }
+                break;
+
+            case 4:
+                delete_at_beginning(&head);
+                break;
+
+            case 5:
+                delete_at_end(&head);
+                break;
+
+            case 6:
+                printf("Enter Position: ");
+                scanf("%d", &position);
+                delete_at_position(&head, position);
+                break;
+
+            case 7:
+                printf("\n--- Contact List ---\n");
+                display_list(head);
+                break;
+
+            case 0:
+                printf("Exiting the program.\n");
+                break;
+
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+
+    } while (user_choice != 0);
+
+    return 0;
+}
