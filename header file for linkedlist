@@ -1,0 +1,148 @@
+#ifndef CONTACT_LIST_H
+#define CONTACT_LIST_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define NAME_LEN 100
+#define PHONE_LEN 15
+
+// Node structure
+typedef struct Node {
+    char name[NAME_LEN];
+    char phone[PHONE_LEN];
+    struct Node* next;
+} Node;
+
+// Function declarations
+Node* create_node(const char* name, const char* phone);
+void insert_at_beginning(Node** head, const char* name, const char* phone);
+void insert_at_end(Node** head, const char* name, const char* phone);
+void insert_at_position(Node** head, const char* name, const char* phone, int position);
+void delete_at_beginning(Node** head);
+void delete_at_end(Node** head);
+void delete_at_position(Node** head, int position);
+void display_list(Node* head);
+
+// Function definitions
+Node* create_node(const char* name, const char* phone) {
+    Node* new_node = (Node*)malloc(sizeof(Node));
+    if (!new_node) {
+        printf("Memory allocation failed!\n");
+        exit(1);
+    }
+    strncpy(new_node->name, name, NAME_LEN);
+    strncpy(new_node->phone, phone, PHONE_LEN);
+    new_node->next = NULL;
+    return new_node;
+}
+
+void insert_at_beginning(Node** head, const char* name, const char* phone) {
+    Node* new_node = create_node(name, phone);
+    new_node->next = *head;
+    *head = new_node;
+}
+
+void insert_at_end(Node** head, const char* name, const char* phone) {
+    Node* new_node = create_node(name, phone);
+    if (*head == NULL) {
+        *head = new_node;
+        return;
+    }
+    Node* current_node = *head;
+    while (current_node->next != NULL)
+        current_node = current_node->next;
+    current_node->next = new_node;
+}
+
+void insert_at_position(Node** head, const char* name, const char* phone, int position) {
+    if (position <= 1) {
+        insert_at_beginning(head, name, phone);
+        return;
+    }
+
+    Node* new_node = create_node(name, phone);
+    Node* current_node = *head;
+    int current_position = 1;
+
+    while (current_node != NULL && current_position < position - 1) {
+        current_node = current_node->next;
+        current_position++;
+    }
+
+    if (current_node == NULL) {
+        printf("Position out of bounds\n");
+        free(new_node);
+        return;
+    }
+
+    new_node->next = current_node->next;
+    current_node->next = new_node;
+}
+
+void delete_at_beginning(Node** head) {
+    if (*head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    Node* temp_node = *head;
+    *head = (*head)->next;
+    free(temp_node);
+}
+
+void delete_at_end(Node** head) {
+    if (*head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    if ((*head)->next == NULL) {
+        free(*head);
+        *head = NULL;
+        return;
+    }
+    Node* current_node = *head;
+    while (current_node->next->next != NULL)
+        current_node = current_node->next;
+
+    free(current_node->next);
+    current_node->next = NULL;
+}
+
+void delete_at_position(Node** head, int position) {
+    if (*head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    if (position <= 1) {
+        delete_at_beginning(head);
+        return;
+    }
+    Node* current_node = *head;
+    int current_position = 1;
+
+    while (current_node->next != NULL && current_position < position - 1) {
+        current_node = current_node->next;
+        current_position++;
+    }
+
+    if (current_node->next == NULL) {
+        printf("Position out of bounds\n");
+        return;
+    }
+
+    Node* node_to_delete = current_node->next;
+    current_node->next = node_to_delete->next;
+    free(node_to_delete);
+}
+
+void display_list(Node* head) {
+    int entry_number = 1;
+    while (head != NULL) {
+        printf("%d. Name: %s, Phone: %s\n", entry_number, head->name, head->phone);
+        head = head->next;
+        entry_number++;
+    }
+}
+
+#endif // CONTACT_LIST_H
