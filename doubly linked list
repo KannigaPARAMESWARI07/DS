@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define node structure
+typedef struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+} Node;
+
+// Create a new node
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Insert node at the end of the list
+void insertAtEnd(Node** headRef, int data) {
+    Node* newNode = createNode(data);
+    Node* currentNode;
+
+    if (*headRef == NULL) {
+        *headRef = newNode;
+        return;
+    }
+
+    currentNode = *headRef;
+    while (currentNode->next != NULL) {
+        currentNode = currentNode->next;
+    }
+
+    currentNode->next = newNode;
+    newNode->prev = currentNode;
+}
+
+// Print list forward
+void printList(Node* head) {
+    Node* currentNode = head;
+    printf("Doubly Linked List: ");
+    while (currentNode != NULL) {
+        printf("%d <-> ", currentNode->data);
+        currentNode = currentNode->next;
+    }
+    printf("NULL\n");
+}
+
+// Main function
+int main() {
+    Node* head = NULL;
+    int totalElements, elementIndex, elementValue;
+
+    printf("Enter the number of elements to insert: ");
+    scanf("%d", &totalElements);
+
+    for (elementIndex = 0; elementIndex < totalElements; elementIndex++) {
+        printf("Enter value %d: ", elementIndex + 1);
+        scanf("%d", &elementValue);
+        insertAtEnd(&head, elementValue);
+    }
+
+    printList(head);
+
+    return 0;
+}
